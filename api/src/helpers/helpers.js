@@ -9,7 +9,8 @@ function getDataFromBreed(breed){
             let temp=breed.temperament
             let temps=temp.split(',');
             temps.forEach(t=>temperament.push(t.trim()))//le quito espacio inicial y final
-        }else{  
+        }else{ 
+            if(breed.temperaments) 
             breed.temperaments.forEach(temp=>temperament.push(temp.name))
         }        
         const img = breed.image ? breed.image.url : 'No especificado'

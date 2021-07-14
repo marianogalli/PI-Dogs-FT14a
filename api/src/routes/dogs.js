@@ -5,7 +5,7 @@ const { Router } = require('express');
 const router = Router();
 
 const { Breed, Temperament } = require('../db')
-const {getDataFromBreed}=require('../helpers/helpers')
+const { getDataFromBreed } = require('../helpers/helpers')
 const { capMiddleware } = require('../middlewars/StringMiddleware')
 
 router.get('/', capMiddleware, async (req, res) => {
@@ -21,12 +21,12 @@ router.get('/', capMiddleware, async (req, res) => {
 
     if (!name) {
         url = `https://api.thedogapi.com/v1/breeds?api_key=${process.env.API_KEY}`
-        razasDB = await Breed.findAll({include:Temperament})
+        razasDB = await Breed.findAll({ include: Temperament })
     } else {
         url = `https://api.thedogapi.com/v1/breeds/search?api_key=${process.env.API_KEY}&name=${name}`
         razasDB = await Breed.findAll({
-            where: {name: { [Op.like]: `%${name}%`}},
-            include:Temperament            
+            where: { name: { [Op.like]: `%${name}%` } },
+            include: Temperament
         });
     }
 
@@ -35,9 +35,13 @@ router.get('/', capMiddleware, async (req, res) => {
     let allRazas = razasDB.concat(razasAPI);
     let resultadoFinal = [];
 
-    allRazas.forEach(raza => {
-        resultadoFinal.push(getDataFromBreed(raza))
-    })
+    console.log(allRazas)
+
+    if (allRazas.length > 0) {
+        allRazas.forEach(raza => {
+            resultadoFinal.push(getDataFromBreed(raza))
+        })
+    }
 
     if (name && resultadoFinal.length == 0) {
         return res.status(404).json({
@@ -49,39 +53,47 @@ router.get('/', capMiddleware, async (req, res) => {
 
 
 router.get('/:id', async (req, res) => {
-    
-    let idFind=req.params.id;
+
+    let idFind = req.params.id;
     let razaFound;
 
-    if(idFind/1){
+    if (idFind / 1) {
         let url = `https://api.thedogapi.com/v1/breeds?api_key=${process.env.API_KEY}`
-        const resp =await axios.get(url);
-        razaFound=resp.data.find(raza => raza.id == idFind)
-    }else{
-        razaFound=await Breed.findByPk(idFind,{include:Temperament})
+        const resp = await axios.get(url);
+        razaFound = resp.data.find(raza => raza.id == idFind)
+    } else {
+        razaFound = await Breed.findByPk(idFind, { include: Temperament })
     }
-    
-    const razaDetail=getDataFromBreed(razaFound)   
-    return res.json(razaDetail)
+
+    if (razaFound) {
+        const razaDetail = getDataFromBreed(razaFound)
+        return res.json(razaDetail)
+    }
+
+    return res.status(404).json({
+        message:`No se encontró una raza con id ${idFind}`
+    })
+
 })
 
-router.post('/',async (req,res)=>{
-    
-    const {name,height,weight,years,temperament}=req.body;
-    const raza=await Breed.create({name,height,weight,years})
+router.post('/', async (req, res) => {
 
-    temperament.forEach(async temp=>{
-        const temperamento=await Temperament.findOrCreate({
-            where:{name:temp}
+    const { name, height, weight, years, temperament } = req.body;
+    const raza = await Breed.create({ name, height, weight, years })
+
+    temperament.forEach(async temp => {
+        const temperamento = await Temperament.findOrCreate({
+            where: { name: temp }
         })
-        await raza.addTemperament(temperamento[0])        
+        await raza.addTemperament(temperamento[0])
     })
-    
+
     res.json({
-        ok:true
+        ok: true
     })
-    
+
 })
+
 
 //Forma vieja
 /*
