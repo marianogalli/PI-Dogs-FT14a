@@ -17,19 +17,21 @@ class Home extends React.Component {
     constructor(props) {
 
         super(props)
-        this.state = {
-            breed: '',
-            temperament: '',
-            source: '',
-            attribute: 'name',
-            order: 'asc'
-        }
+        this.state = this.getInitialState();
     }
 
     handleOnSubmit = (e) => {
         e.preventDefault();
         this.props.getBreedsName(this.state.breed);
     }
+
+    getInitialState = () => ({
+        breed: '',
+        temperament: '',
+        source: '',
+        attribute: 'name',
+        order: 'asc'
+    })
 
     handleOnChange = async (e) => {
         await this.setState({
@@ -59,21 +61,14 @@ class Home extends React.Component {
         let radios = document.getElementsByName('source');
         radios.forEach(r => r.checked = false)
 
-        this.setState({
-            //...this.state,
-            breed: '',
-            temperament: '',
-            source: '',
-            attribute: '',
-            order: ''
-        })
+        this.setState(this.getInitialState())
 
         this.props.clearFilters();
     }
 
     render() {
 
-        
+
         return (
             <>
                 <h1>Estoy en Home!!</h1>
@@ -89,8 +84,8 @@ class Home extends React.Component {
                     <RadioButton onChange={this.handleOnChange} />
 
                     <select name="attribute" onChange={this.handleOnChange} value={this.state.attribute}>
-                    <option value="name">Breed</option>
-                        <option value="weight">Weight</option>                        
+                        <option value="name">Breed</option>
+                        <option value="weight">Weight</option>
                     </select>
 
                     <select name="order" onChange={this.handleOnChange} value={this.state.order}>
@@ -107,7 +102,7 @@ class Home extends React.Component {
         )
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.props.getBreeds();
     }
 

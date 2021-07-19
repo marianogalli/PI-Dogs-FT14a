@@ -1,6 +1,7 @@
 import React from 'react';
 import ComboTemperament from '../components/reduxComponents/smarts/ComboTemperament';
 import axios from 'axios'
+import DetailTemperament from '../components/reduxComponents/dumbs/DetailTemperament';
 
 export default class Add extends React.Component {
 
@@ -67,8 +68,15 @@ export default class Add extends React.Component {
             years: this.state.years,
             temperament: this.state.temperament
         }
-
         this.addBreedToDB(raza);
+    }
+
+    handleOnClose=(e)=>{
+        console.log(e.target.previousSibling.textContent);
+        this.setState({
+            ...this.state,
+            temperament:this.state.temperament.filter(t=>t!==e.target.previousSibling.textContent)
+        })
     }
 
     render() {
@@ -80,40 +88,45 @@ export default class Add extends React.Component {
                 <form onSubmit={this.handleOnSubmit}>
                     <div>
                         <label>Nombre (*) </label>
-                        <input name="breed" required="true" onChange={this.handleOnChange} value={this.state.breed}/>
+                        <input name="breed" required onChange={this.handleOnChange} value={this.state.breed} />
                     </div>
                     <div>
                         <label>Altura minima (*) </label>
-                        <input type="number" name="minHeight" required="true" onChange={this.handleOnChange} value={this.state.minHeight} />
+                        <input type="number" name="minHeight" required onChange={this.handleOnChange} value={this.state.minHeight} />
                     </div>
                     <div>
                         <label>Altura maxima (*) </label>
-                        <input type="number" name="maxHeight" required="true" onChange={this.handleOnChange} value={this.state.maxHeight}/>
+                        <input type="number" name="maxHeight" required onChange={this.handleOnChange} value={this.state.maxHeight} />
                     </div>
                     <div>
                         <label>Peso minimo (*) </label>
-                        <input type="number" name="minWeight" required="true" onChange={this.handleOnChange} value={this.state.minWeight}/>
+                        <input type="number" name="minWeight" required onChange={this.handleOnChange} value={this.state.minWeight} />
                     </div>
                     <div>
                         <label>Peso maximo (*) </label>
-                        <input type="number" name="maxWeight" required="true" onChange={this.handleOnChange} value={this.state.maxWeight}/>
+                        <input type="number" name="maxWeight" required onChange={this.handleOnChange} value={this.state.maxWeight} />
                     </div>
                     <div>
                         <label>Años </label>
-                        <input type="number" name="years" onChange={this.handleOnChange} value={this.state.years}/>
+                        <input type="number" name="years" onChange={this.handleOnChange} value={this.state.years} />
                     </div>
 
                     <div>
                         <label>Temperamentos </label>
-                        <ComboTemperament onChange={this.handleOnChange} name="temperament"/>
-                    </div>
+                        <ComboTemperament onChange={this.handleOnChange} name="temperament" />
 
+                        {
+                            this.state.temperament.length>0?this.state.temperament.map((t,i)=><DetailTemperament key={i} handleOnClose={this.handleOnClose} temperament={t}/>):''
+                        }
+
+                    </div>        
 
 
                     <input type="submit" value="Aceptar" />
 
                 </form>
 
+               
                 <div>{this.state.message}</div>
 
             </>

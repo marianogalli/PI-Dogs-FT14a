@@ -52,7 +52,7 @@ export function getBreedsBySource(source){
 }
 
 export function getSortedBreeds(attribute,order){
-    console.log('llega al action');
+
     return {
         type: GET_SORTED_BREEDS,
         payload:{
