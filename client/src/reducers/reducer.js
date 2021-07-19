@@ -4,11 +4,14 @@ import {
     GET_TEMPERAMENTS,
     GET_BREEDS_BY_TEMPERAMENT,
     GET_BREEDS_BY_SOURCE,
-    GET_SORTED_BREEDS
+    GET_SORTED_BREEDS,
+    CLEAR_FILTERS
 } from '../actions/actions'
+import {getSort} from '../helpers/helpers'
 
 const initialState = {
-    breeds: [],
+    breeds: [],// pueden ser todas o filtradas
+    data:[],//toooodas las razas
     temperaments: []
 }
 
@@ -20,12 +23,14 @@ export default function rootReducer(state = initialState, action) {
             
             return {
                 ...state,
+                data:action.payload,
                 breeds: action.payload
             }
 
         case GET_BREEDS_NAME:
             return {
                 ...state,
+                data:action.payload,
                 breeds: action.payload
             }
 
@@ -38,30 +43,37 @@ export default function rootReducer(state = initialState, action) {
         case GET_BREEDS_BY_TEMPERAMENT:
             return {
                 ...state,
-                breeds: state.breeds.filter(breed => breed.temperament.includes(action.payload))
+                breeds: state.data.filter(breed => breed.temperament.includes(action.payload))
             }
 
         case GET_BREEDS_BY_SOURCE: {
             if (action.payload === "API") {
                 return {
                     ...state,
-                    breeds: state.breeds.filter(breed => typeof breed.id == "number")
+                    breeds: state.data.filter(breed => typeof breed.id == "number")
                 }
-            }
-
-            if (action.payload === "DB") {
+            }else{
                 return {
                     ...state,
-                    breeds: state.breeds.filter(breed => typeof breed.id !== "number")
+                    breeds: state.data.filter(breed => typeof breed.id !== "number")
                 }
             }
         }
-
-        case GET_SORTED_BREEDS:
-        return{
-            ...state
+                
+        case GET_SORTED_BREEDS:{
+            
+            return {
+                ...state,
+                breeds:getSort(state.breeds,action.payload.attribute,action.payload.order)
+            }
         }
 
+        case CLEAR_FILTERS:{
+            return {
+                ...state,
+                breeds:state.data
+            }
+        }
 
         default: return state;
     }

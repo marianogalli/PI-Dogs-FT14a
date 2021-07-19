@@ -45,7 +45,6 @@ export function getBreedsByTemperament(temperament){
 }
 
 export function getBreedsBySource(source){
-
     return {
         type: GET_BREEDS_BY_SOURCE,
         payload:source
@@ -64,5 +63,8 @@ export function getSortedBreeds(attribute,order){
 }
 
 export function clearFilters(){
-    return getBreeds();
+
+    return {
+        type:CLEAR_FILTERS
+    }
 }

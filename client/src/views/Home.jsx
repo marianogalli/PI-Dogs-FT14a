@@ -20,9 +20,9 @@ class Home extends React.Component {
         this.state = {
             breed: '',
             temperament: '',
-            source:'',
-            attribute:'',
-            order:''
+            source: '',
+            attribute: 'name',
+            order: 'asc'
         }
     }
 
@@ -41,13 +41,14 @@ class Home extends React.Component {
             return this.props.getBreedsByTemperament(this.state.temperament)
         }
 
-        if(e.target.name==="source"){
-            await this.props.getBreeds();
+        if (e.target.name === "source") {
+            console.log('al handle llega');
+            //await this.props.getBreeds();
             return this.props.getBreedsBySource(this.state.source)
         }
 
-        if(e.target.name==='attribute' || e.target.name==='order'){
-            return this.props.getSortedBreeds(this.state.attribute,this.state.order)
+        if (e.target.name === 'attribute' || e.target.name === 'order') {
+            return this.props.getSortedBreeds(this.state.attribute, this.state.order)
         }
 
     }
@@ -55,20 +56,24 @@ class Home extends React.Component {
     handleOnClick = () => {
 
         //Deschequeo todos los radiobutton
-        let radios=document.getElementsByName('source');
-        radios.forEach(r=>r.checked=false)
-        
+        let radios = document.getElementsByName('source');
+        radios.forEach(r => r.checked = false)
+
         this.setState({
             //...this.state,
             breed: '',
             temperament: '',
-            source:'',
-            attribute:'',
-            order:''
+            source: '',
+            attribute: '',
+            order: ''
         })
+
+        this.props.clearFilters();
     }
 
     render() {
+
+        
         return (
             <>
                 <h1>Estoy en Home!!</h1>
@@ -80,23 +85,30 @@ class Home extends React.Component {
 
                     <ComboTemperament onChange={this.handleOnChange} value={this.state.temperament} />
                     <button onClick={this.handleOnClick}>Limpiar filtros</button>
-                    <RadioButton onChange={this.handleOnChange}/>
+
+                    <RadioButton onChange={this.handleOnChange} />
+
                     <select name="attribute" onChange={this.handleOnChange} value={this.state.attribute}>
-                        <option value="name">Breed</option>
-                        <option value="weight">Weight</option>
+                    <option value="name">Breed</option>
+                        <option value="weight">Weight</option>                        
                     </select>
+
                     <select name="order" onChange={this.handleOnChange} value={this.state.order}>
                         <option>asc</option>
                         <option>desc</option>
                     </select>
+
                 </form>
 
                 {
                     this.props.breeds.length > 0 ? this.props.breeds.map(b => <Breed key={b.id} name={b.name} img={b.img} temp={b.temperament} />) : <p>!!</p>
-
                 }
             </>
         )
+    }
+
+    componentDidMount(){
+        this.props.getBreeds();
     }
 
 }
@@ -110,7 +122,9 @@ function mapStateToProps(state) {
 
 export default connect(
     mapStateToProps,
-    { getBreeds, getBreedsName, 
-        getBreedsByTemperament, clearFilters, 
-        getBreedsBySource, getSortedBreeds }
+    {
+        getBreeds, getBreedsName,
+        getBreedsByTemperament, clearFilters,
+        getBreedsBySource, getSortedBreeds
+    }
 )(Home)
