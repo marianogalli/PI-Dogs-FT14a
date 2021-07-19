@@ -5,17 +5,21 @@ const { Router } = require('express');
 const router = Router();
 
 const { Breed, Temperament } = require('../db')
-const { getDataFromBreed } = require('../helpers/helpers')
-const { capMiddleware } = require('../middlewars/StringMiddleware')
+const { getDataFromBreed,capitalize } = require('../helpers/helpers')
 
-router.get('/', capMiddleware, async (req, res) => {
+router.get('/', async (req, res) => {
     /*
     await Breed.create({name: 'Breton',height: '60 - 70',weight: '30 - 40',years: '10 - 12' })
     await Breed.create({name: 'Setter',height: '60 - 70',weight: '30 - 40',years: '10 - 12' })
     await Breed.create({name: 'Golden',height: '60 - 70',weight: '30 - 40',years: '10 - 12'})
     await Breed.create({name: 'Bull Terrier',height: '40 - 50',weight: '30 - 40',years: '10 - 12'})
     */
-    const { name } = req.query;
+    let { name } = req.query;
+    if(name){
+        name=capitalize(name);
+    }
+    
+
     let url;
     let razasDB;
 
@@ -45,7 +49,7 @@ router.get('/', capMiddleware, async (req, res) => {
 
     if (name && resultadoFinal.length == 0) {
         return res.status(404).json({
-            message: `No se encontraron resultados para la búsqueda '${name}'`
+            message: `There is not result to breed '${name}'`
         })
     }
     return res.json(resultadoFinal)
@@ -78,8 +82,23 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
 
-    const { name, height, weight, years, temperament } = req.body;
-    const raza = await Breed.create({ name, height, weight, years })
+    let { name, height, weight, years, temperament } = req.body;
+    name=capitalize(name);
+
+    const raza=await Breed.findOrCreate({
+        where:{name:name},
+        defaults:{
+            height,
+            weight,
+            years
+        }
+    })
+
+    if(raza[1]==false){
+        return res.status(403).json({
+            error:`${name} already exists in DB!`
+        })
+    }
 
     temperament.forEach(async temp => {
         const temperamento = await Temperament.findOrCreate({
@@ -88,8 +107,8 @@ router.post('/', async (req, res) => {
         await raza.addTemperament(temperamento[0])
     })
 
-    res.json({
-        ok: true
+    return res.json({
+        message:`${name} added!`
     })
 
 })

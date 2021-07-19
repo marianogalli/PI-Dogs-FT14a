@@ -18,8 +18,18 @@ function getDataFromBreed(breed){
         return {id,name,height,weight,years,temperament,img}
 }
 
+function capitalize(string){
+    
+    string=string.toLowerCase();
+    string=string.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));            
+    return string;
+    
+ 
+}
+
 module.exports={
-    getDataFromBreed
+    getDataFromBreed,
+    capitalize
 }
 
 

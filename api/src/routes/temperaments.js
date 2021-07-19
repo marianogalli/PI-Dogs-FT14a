@@ -23,7 +23,7 @@ router.get('/',async(req,res)=>{
     })
 
     let temperamentsDB=await Temperament.findAll({
-        attributes:['name'],
+        attributes:['name','id'],
         order:['name']
     });
     

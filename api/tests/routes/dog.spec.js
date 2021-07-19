@@ -2,10 +2,10 @@
 const { expect } = require('chai');
 const session = require('supertest-session');
 const app = require('../../src/app.js');
-const { Dog, conn } = require('../../src/db.js');
+const { Breed, conn } = require('../../src/db.js');
 
 const agent = session(app);
-const dog = {
+const breed = {
   name: 'Pug',
 };
 
@@ -14,8 +14,8 @@ describe('Videogame routes', () => {
   .catch((err) => {
     console.error('Unable to connect to the database:', err);
   }));
-  beforeEach(() => Dog.sync({ force: true })
-    .then(() => Dog.create(dog)));
+  beforeEach(() => Breed.sync({ force: true })
+    .then(() => Breed.create(breed)));
   describe('GET /dogs', () => {
     it('should get 200', () =>
       agent.get('/dogs').expect(200)
