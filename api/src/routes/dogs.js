@@ -75,7 +75,7 @@ router.get('/:id', async (req, res) => {
     }
 
     return res.status(404).json({
-        message:`No se encontró una raza con id ${idFind}`
+        message:`Not found breed with id ${idFind}`
     })
 
 })
