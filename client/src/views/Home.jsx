@@ -123,7 +123,7 @@ class Home extends React.Component {
                 <button onClick={this.nextPage}>Next</button>
 
                 {
-                    this.paginatedResults().length > 0 ? this.paginatedResults().map(b => <Breed key={b.id} name={b.name} img={b.img} temp={b.temperament} />) : <p>!!</p>
+                    this.paginatedResults().length > 0 ? this.paginatedResults().map(b => <Breed key={b.id} name={b.name} id={b.id} img={b.img} temp={b.temperament} />) : <p>!!</p>
                 }
             </>
         )

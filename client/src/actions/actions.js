@@ -5,6 +5,8 @@ export const GET_BREEDS_BY_TEMPERAMENT='GET_BREEDS_BY_TEMPERAMENT'
 export const GET_BREEDS_BY_SOURCE='GET_BREEDS_BY_SOURCE'
 export const CLEAR_FILTERS='CLEAR_FITERS'
 export const GET_SORTED_BREEDS='GET_SORTED_BREEDS'
+export const GET_BREED_DETAIL='GET_BREEDS_DETAIL'
+export const LOADING='LOADING'
 
 export function getBreeds(){
     return function(dispatch){
@@ -66,5 +68,16 @@ export function clearFilters(){
 
     return {
         type:CLEAR_FILTERS
+    }
+}
+
+export function getBreedDetail(id){
+    return function(dispatch){
+        dispatch({type:'LOADING'})
+        return fetch(`http://localhost:3001/dogs/${id}`)
+        .then(resp=>resp.json())
+        .then((breed)=>{
+            dispatch({type:GET_BREED_DETAIL, payload:breed})
+        })
     }
 }

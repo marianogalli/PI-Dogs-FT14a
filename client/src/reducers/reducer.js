@@ -5,14 +5,18 @@ import {
     GET_BREEDS_BY_TEMPERAMENT,
     GET_BREEDS_BY_SOURCE,
     GET_SORTED_BREEDS,
-    CLEAR_FILTERS
+    CLEAR_FILTERS,
+    GET_BREED_DETAIL,
+    LOADING
 } from '../actions/actions'
 import {getSort} from '../helpers/helpers'
 
 const initialState = {
     breeds: [],// pueden ser todas o filtradas
     data:[],//toooodas las razas
-    temperaments: []
+    temperaments: [],
+    breedDetail:{},
+    loading:false
 }
 
 export default function rootReducer(state = initialState, action) {
@@ -72,6 +76,25 @@ export default function rootReducer(state = initialState, action) {
             return {
                 ...state,
                 breeds:state.data
+            }
+        }
+
+        case GET_BREED_DETAIL:{
+            //console.log('breed desde reducer ',action.payload);
+            let obj={
+                ...state,
+                loading:false,
+                breedDetail:action.payload
+            }
+            console.log('obj del reducer ',obj);
+            
+            return obj;
+        }
+
+        case LOADING:{
+            return {
+                ...state,
+                loading:true
             }
         }
 

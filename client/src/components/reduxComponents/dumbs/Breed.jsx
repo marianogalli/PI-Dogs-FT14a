@@ -1,9 +1,10 @@
 import React from 'react';
+import {Link} from 'react-router-dom' 
 
 
 export default function Breed(props) {
 
-    const { name, img, temp } = props;
+    const { name, img, temp, id } = props;
 
     return (
         <div>
@@ -15,7 +16,12 @@ export default function Breed(props) {
                 }
             </ul>
 
+            <Link to={`/dogs/detail/${id}`}>Detalle</Link>
+
+            
         </div>
     )
+
+
 }
 
