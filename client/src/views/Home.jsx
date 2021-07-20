@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { connect } from 'react-redux'
 import {
     getBreeds,
@@ -30,12 +30,14 @@ class Home extends React.Component {
         temperament: '',
         source: '',
         attribute: 'name',
-        order: 'asc'
+        order: 'asc',
+        currentPage:0
     })
 
     handleOnChange = async (e) => {
         await this.setState({
             ...this.state,
+            currentPage:0,
             [e.target.name]: e.target.value
         })
 
@@ -64,6 +66,27 @@ class Home extends React.Component {
         this.setState(this.getInitialState())
 
         this.props.clearFilters();
+    }
+
+    previousPage=()=>{
+        if(this.state.currentPage>0){
+            this.setState({
+                ...this.state,
+                currentPage:this.state.currentPage-5
+            })
+        }        
+    }
+
+    nextPage=()=>{
+        if(this.state.currentPage+5 < this.props.breeds.length)
+        this.setState({
+            ...this.state,
+            currentPage:this.state.currentPage+5
+        })
+    }
+
+    paginatedResults=()=>{
+        return this.props.breeds.slice(this.state.currentPage,this.state.currentPage+5)
     }
 
     render() {
@@ -95,8 +118,12 @@ class Home extends React.Component {
 
                 </form>
 
+                <button onClick={this.previousPage}>Previous</button>
+
+                <button onClick={this.nextPage}>Next</button>
+
                 {
-                    this.props.breeds.length > 0 ? this.props.breeds.map(b => <Breed key={b.id} name={b.name} img={b.img} temp={b.temperament} />) : <p>!!</p>
+                    this.paginatedResults().length > 0 ? this.paginatedResults().map(b => <Breed key={b.id} name={b.name} img={b.img} temp={b.temperament} />) : <p>!!</p>
                 }
             </>
         )
