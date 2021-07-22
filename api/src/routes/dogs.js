@@ -17,8 +17,7 @@ router.get('/', async (req, res) => {
     let { name } = req.query;
     if(name){
         name=capitalize(name);
-    }
-    
+    }   
 
     let url;
     let razasDB;
@@ -38,8 +37,6 @@ router.get('/', async (req, res) => {
     let razasAPI = resp.data.splice(0, 8);
     let allRazas = razasDB.concat(razasAPI);
     let resultadoFinal = [];
-
-    console.log(allRazas)
 
     if (allRazas.length > 0) {
         allRazas.forEach(raza => {
@@ -82,23 +79,19 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
 
+
     let { name, height, weight, years, temperament } = req.body;
-    name=capitalize(name);
+    name=capitalize(name)
 
-    const raza=await Breed.findOrCreate({
-        where:{name:name},
-        defaults:{
-            height,
-            weight,
-            years
-        }
-    })
+    const findRaza=await Breed.findOne({where:{name:name}})
 
-    if(raza[1]==false){
+    if(findRaza){
         return res.status(403).json({
             error:`${name} already exists in DB!`
         })
     }
+
+    const raza=await Breed.create({name,height,weight,years});
 
     temperament.forEach(async temp => {
         const temperamento = await Temperament.findOrCreate({
@@ -107,14 +100,15 @@ router.post('/', async (req, res) => {
         await raza.addTemperament(temperamento[0])
     })
 
-    return res.json({
+    res.json({
         message:`${name} added!`
     })
+
 
 })
 
 
-//Forma vieja
+//Forma vieja de hacer paginado en el back
 /*
 router.get('/', async (req, res) => {   
   

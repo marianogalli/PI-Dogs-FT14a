@@ -7,7 +7,8 @@ import {
     GET_SORTED_BREEDS,
     CLEAR_FILTERS,
     GET_BREED_DETAIL,
-    LOADING
+    LOADING,
+    ERROR
 } from '../actions/actions'
 import {getSort} from '../helpers/helpers'
 
@@ -16,7 +17,8 @@ const initialState = {
     data:[],//toooodas las razas
     temperaments: [],
     breedDetail:{},
-    loading:false
+    loading:false,
+    error:null
 }
 
 export default function rootReducer(state = initialState, action) {
@@ -34,6 +36,7 @@ export default function rootReducer(state = initialState, action) {
         case GET_BREEDS_NAME:
             return {
                 ...state,
+                error:null,
                 data:action.payload,
                 breeds: action.payload
             }
@@ -44,11 +47,22 @@ export default function rootReducer(state = initialState, action) {
                 temperaments: action.payload
             }
 
-        case GET_BREEDS_BY_TEMPERAMENT:
-            return {
+        case GET_BREEDS_BY_TEMPERAMENT:{
+            let obj={
                 ...state,
+                error:null,
                 breeds: state.data.filter(breed => breed.temperament.includes(action.payload))
             }
+
+            if(obj.breeds.length===0){
+                return {
+                    ...state,
+                    error:'Not breeds found with this temperament'
+                }
+            }
+
+            return obj;
+        }
 
         case GET_BREEDS_BY_SOURCE: {
             if (action.payload === "API") {
@@ -75,19 +89,25 @@ export default function rootReducer(state = initialState, action) {
         case CLEAR_FILTERS:{
             return {
                 ...state,
+                error:null,
                 breeds:state.data
             }
         }
 
+        case ERROR:{
+            return{
+                ...state,
+                error:action.payload
+            }
+        }
+
         case GET_BREED_DETAIL:{
-            //console.log('breed desde reducer ',action.payload);
+            //console.log('temps desde el reducer: ',action.payload.temperament);
             let obj={
                 ...state,
                 loading:false,
                 breedDetail:action.payload
-            }
-            console.log('obj del reducer ',obj);
-            
+            }          
             return obj;
         }
 

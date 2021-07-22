@@ -1,11 +1,17 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
 
 
-export default function Landing(){
-    return(
+export default function Landing() {
+    return (
         <>
-        <h1>Aca va una imagen</h1>
-        <p>Aca va un boton</p>
+
+            <div className="landing">
+
+            </div>
+
+
+
         </>
     )
 }

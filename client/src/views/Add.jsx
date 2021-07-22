@@ -71,65 +71,62 @@ export default class Add extends React.Component {
         this.addBreedToDB(raza);
     }
 
-    handleOnClose=(e)=>{
+    handleOnClose = (e) => {
         console.log(e.target.previousSibling.textContent);
         this.setState({
             ...this.state,
-            temperament:this.state.temperament.filter(t=>t!==e.target.previousSibling.textContent)
+            temperament: this.state.temperament.filter(t => t !== e.target.previousSibling.textContent)
         })
     }
 
     render() {
 
         return (
-            <>
-                <h1>Formulario para agregar raza</h1>
+            <div className="grid-container">
 
-                <form onSubmit={this.handleOnSubmit}>
-                    <div>
-                        <label>Nombre (*) </label>
-                        <input name="breed" required onChange={this.handleOnChange} value={this.state.breed} />
-                    </div>
-                    <div>
-                        <label>Altura minima (*) </label>
-                        <input type="number" name="minHeight" required onChange={this.handleOnChange} value={this.state.minHeight} />
-                    </div>
-                    <div>
-                        <label>Altura maxima (*) </label>
-                        <input type="number" name="maxHeight" required onChange={this.handleOnChange} value={this.state.maxHeight} />
-                    </div>
-                    <div>
-                        <label>Peso minimo (*) </label>
-                        <input type="number" name="minWeight" required onChange={this.handleOnChange} value={this.state.minWeight} />
-                    </div>
-                    <div>
-                        <label>Peso maximo (*) </label>
-                        <input type="number" name="maxWeight" required onChange={this.handleOnChange} value={this.state.maxWeight} />
-                    </div>
-                    <div>
-                        <label>Años </label>
-                        <input type="number" name="years" onChange={this.handleOnChange} value={this.state.years} />
-                    </div>
+                <div className="contenedor">
+                    <form className="form" id="frm-add" onSubmit={this.handleOnSubmit}>
+                        <div className="form-header">
+                        </div>
 
-                    <div>
-                        <label>Temperamentos </label>
-                        <ComboTemperament onChange={this.handleOnChange} name="temperament" />
+                        <label className="form-label">Breed name (*) </label>
+                        <input name="breed" required className="form-input" onChange={this.handleOnChange} value={this.state.breed} />
+
+                        <label className="form-label">Min height (*) </label>
+                        <input type="number" className="form-input" name="minHeight" required onChange={this.handleOnChange} value={this.state.minHeight} />
+
+                        <label className="form-label">Max height (*) </label>
+                        <input type="number" className="form-input" name="maxHeight" required onChange={this.handleOnChange} value={this.state.maxHeight} />
+                        
+                        <label className="form-label">Temperament(s) </label>
+                        <ComboTemperament className="form-input" onChange={this.handleOnChange} name="temperament" />
 
                         {
-                            this.state.temperament.length>0?this.state.temperament.map((t,i)=><DetailTemperament key={i} handleOnClose={this.handleOnClose} temperament={t}/>):''
+                            <div className="flex-temperaments">
+                                {
+                                    this.state.temperament.length > 0 ? this.state.temperament.map((t, i) => <DetailTemperament key={i} handleOnClose={this.handleOnClose} temperament={t} />) : ''
+                                }
+                            </div>
+                            
                         }
 
-                    </div>        
+                        <label className="form-label">Min weight (*) </label>
+                        <input type="number" className="form-input" name="minWeight" required onChange={this.handleOnChange} value={this.state.minWeight} />
 
+                        <label className="form-label">Max weight (*) </label>
+                        <input type="number" className="form-input" name="maxWeight" required onChange={this.handleOnChange} value={this.state.maxWeight} />
 
-                    <input type="submit" value="Aceptar" />
+                        <label className="form-label">Life span (years) </label>
+                        <input type="number" className="form-input" name="years" onChange={this.handleOnChange} value={this.state.years} />
 
-                </form>
+                        <input type="submit" className="btn-submit" value="Save" />
 
-               
-                <div>{this.state.message}</div>
+                        <div className="div-alert"><p>{this.state.message}</p></div>
+                    </form>                    
 
-            </>
+                </div>
+
+            </div>
 
         )
     }

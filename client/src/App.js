@@ -9,11 +9,12 @@ import Detail from './views/Detail'
 function App() {
   return (
     <div className="App">
+      <Route exact path="/" component={Landing} /> 
       <Route path="/" component={Nav} />
-      <Route exact path="/" component={Home} />
+      <Route exact path="/dogs" component={Home} />
       <Route path="/dogs/add" component={Add}/>
       <Route path="/dogs/detail/:id" component={Detail}/>
-      <Route path="/landing" component={Landing} />     
+          
     </div>
   );
 }
