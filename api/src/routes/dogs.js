@@ -49,7 +49,7 @@ router.get('/', async (req, res) => {
 
     if (name && resultadoFinal.length == 0) {
         return res.status(404).json({
-            message: `There is not result to breed '${name}'`
+            message: `There are not results to search '${name}'! :(`
         })
     }
     return res.json(resultadoFinal)

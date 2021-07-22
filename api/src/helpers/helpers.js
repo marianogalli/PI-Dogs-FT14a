@@ -13,7 +13,7 @@ function getDataFromBreed(breed){
             if(breed.temperaments) 
             breed.temperaments.forEach(temp=>temperament.push(temp.name))
         }        
-        const img = breed.image ? breed.image.url : 'No especificado'
+        const img = breed.image ? breed.image.url : 'https://www.freude-kinder.com/wp-content/uploads/2020/06/7-1.jpg'
 
         return {id,name,height,weight,years,temperament,img}
 }
@@ -22,8 +22,7 @@ function capitalize(string){
     
     string=string.toLowerCase();
     string=string.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));            
-    return string;
-    
+    return string;    
  
 }
 
